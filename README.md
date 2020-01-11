@@ -242,6 +242,8 @@ fn main() {
 Invalid range of range (expected in 0-100), got 101
 ```
 
+TODO: thiserror::Errorからanyhow::Errorへの移行
+TODO: stacktraceできるないか
 
 ## References
 - [anyhow \- Rust](https://docs.rs/anyhow/1.0.26/anyhow/)
