@@ -167,6 +167,81 @@ Caused by:
     No such file or directory (os error 2)
 ```
 
+## 独自エラー
+
+`thiserror`を追加して、独自エラーとして`ClusterMapError`を定義。
+
+`validate`で`group`の範囲を`0-100`とし、範囲外の場合は、`InvalidGroup(i32)`を返す仕様とした。
+
+```rust
+extern crate anyhow;
+extern crate serde;
+extern crate serde_json;
+extern crate thiserror;
+
+use anyhow::{Context, Result};
+use serde::{Serialize, Deserialize};
+use thiserror::Error;
+use crate::ClusterMapError::InvalidGroup;
+
+#[derive(Serialize, Deserialize, Debug)]
+struct ClusterMap {
+    name: String,
+    group: i32,
+}
+
+#[derive(Error, Debug)]
+pub enum ClusterMapError {
+    #[error("Invalid range of range (expected in 0-100), got {0}")]
+    InvalidGroup(i32),
+}
+
+impl ClusterMap {
+    fn validate(self) -> Result<Self> {
+        if self.group < 0 || self.group > 100 {
+            Err(InvalidGroup(self.group).into())
+        } else {
+            Ok(self)
+        }
+    }
+}
+
+fn get_cluster_info(path: &str) -> Result<ClusterMap> {
+    let config = std::fs::read_to_string(&path)
+        .with_context(|| format!("failed to read config file: {}", path))?;
+    let map: ClusterMap = serde_json::from_str(&config)?;
+    let map = map.validate()?;
+    Ok(map)
+}
+
+
+fn main() {
+    let _ = match get_cluster_info("cluster.json") {
+        Ok(cm) => println!("{:?}", cm),
+        Err(err) => println!("{:?}", err),
+    };
+}
+```
+
+### groupが101の場合（範囲外）
+
+利用するjson
+
+```json
+{
+  "name": "cluster A",
+  "group": 101
+}
+```
+
+実行結果
+
+
+```sh
+❯ cargo run
+Invalid range of range (expected in 0-100), got 101
+```
+
 
 ## References
 - [anyhow \- Rust](https://docs.rs/anyhow/1.0.26/anyhow/)
