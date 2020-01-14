@@ -242,7 +242,26 @@ fn main() {
 Invalid range of range (expected in 0-100), got 101
 ```
 
-TODO: thiserror::Errorからanyhow::Errorへの移行
+### この時点のCargo.toml
+
+```toml
+[dependencies]
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0.44"
+thiserror = "1.0"
+```
+
+
+## thiserror::Errorからanyhow::Errorへの移行
+
+[cargoのPR](https://github.com/rust-lang/cargo/pull/7776/files#diff-51266ed1a600ff8b1a8798b7b55ba3c1R2)をよく見てみると`use anyhow::Error;`と`thiserror`ではなく、`anyhow`を使っているので移行する。
+
+
+
+## 
+
+
 TODO: stacktraceできるないか
 
 ## References
