@@ -252,18 +252,6 @@ serde_json = "1.0.44"
 thiserror = "1.0"
 ```
 
-
-## thiserror::Errorからanyhow::Errorへの移行
-
-[cargoのPR](https://github.com/rust-lang/cargo/pull/7776/files#diff-51266ed1a600ff8b1a8798b7b55ba3c1R2)をよく見てみると`use anyhow::Error;`と`thiserror`ではなく、`anyhow`を使っているので移行する。
-
-
-
-## 
-
-
-TODO: stacktraceできるないか
-
 ## References
 - [anyhow \- Rust](https://docs.rs/anyhow/1.0.26/anyhow/)
 - [Migrate from the \`failure\` crate to \`anyhow\` by alexcrichton · Pull Request \#7776 · rust\-lang/cargo](https://github.com/rust-lang/cargo/pull/7776)
